@@ -9,6 +9,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  // list of todo tasks
+
+  List taskList = [
+    ["First Task", false],
+    ["Second Task", true]
+  ];
+
+  // Create New Task
+  void createNewTask(){
+
+  }
+
+  // check box taped
+  void checkBoxChanged(bool value, int index){
+    setState(() {
+      taskList[index][1] = !taskList[index][1];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +46,23 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: ListView(
-        children: [
-          ToDoTile(),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: createNewTask,
+        backgroundColor: Colors.blueAccent,
+        splashColor: Colors.blue,
+        shape: const CircleBorder(),
+        child: Icon(Icons.add),
       ),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return ToDoTile(
+              taskName: taskList[index][0],
+              taskCompleted: taskList[index][1],
+              onChanged: (value) => checkBoxChanged(value!, index),
+          );
+        },
+        itemCount: taskList.length,
+      )
     );
   }
 }
