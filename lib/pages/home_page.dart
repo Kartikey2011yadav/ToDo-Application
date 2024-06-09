@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo/data/database.dart';
 import 'package:todo/util/dialog_box.dart';
 import 'package:todo/util/todo_tile.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,20 +12,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // reference the box
+  final _myBox = Hive.openBox('myBox');
 
   // Text controller
   final _controller = TextEditingController();
-
-  // list of todo tasks
-  List taskList = [
-    ["First Task", false],
-    ["Second Task", true]
-  ];
+  
+  // ToDo Database instance
+  ToDoDatabase db = ToDoDatabase();
 
   // Save new Task
   void saveNewTask(){
     setState(() {
-      taskList.add([_controller.text, false]);
+      db.taskList.add([_controller.text, false]);
       _controller.clear();
       Navigator.of(context).pop();
     });
@@ -43,16 +44,16 @@ class _HomePageState extends State<HomePage> {
   // check box taped
   void checkBoxChanged(bool value, int index) {
     setState(() {
-      taskList[index][1] = !taskList[index][1];
+      db.taskList[index][1] = !db.taskList[index][1];
     });
   }
 
   // delete existing Task
   void deleteTask(int index){
     setState(() {
-      taskList.removeAt(index);
+      db.taskList.removeAt(index);
     });
-    // taskList.removeAt(index);
+    // db.taskList.removeAt(index);
     print(index);
   }
 
@@ -83,14 +84,14 @@ class _HomePageState extends State<HomePage> {
         body: ListView.builder(
           itemBuilder: (context, index) {
             return ToDoTile(
-              taskName: taskList[index][0],
-              taskCompleted: taskList[index][1],
+              taskName: db.taskList[index][0],
+              taskCompleted: db.taskList[index][1],
               index: index,
               onChanged: (value) => checkBoxChanged(value!, index),
               deleteTask: (context) => deleteTask(index),
             );
           },
-          itemCount: taskList.length,
+          itemCount: db.taskList.length,
         ));
   }
 }
