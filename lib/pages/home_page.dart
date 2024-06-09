@@ -10,8 +10,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // list of todo tasks
 
+  // Text controller
+  final _controller = TextEditingController();
+
+  // list of todo tasks
   List taskList = [
     ["First Task", false],
     ["Second Task", true]
@@ -20,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   // Create New Task
   void createNewTask() {
     showDialog(context: context, builder: (context) {
-      return DialogBox();
+      return DialogBox(controller: _controller,);
     });
   }
 
