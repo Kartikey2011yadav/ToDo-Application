@@ -47,6 +47,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // delete existing Task
+  void deleteTask(int index){
+    setState(() {
+      taskList.removeAt(index);
+    });
+    // taskList.removeAt(index);
+    print(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,14 +78,16 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.blueAccent,
           splashColor: Colors.blue,
           shape: const CircleBorder(),
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
         body: ListView.builder(
           itemBuilder: (context, index) {
             return ToDoTile(
               taskName: taskList[index][0],
               taskCompleted: taskList[index][1],
+              index: index,
               onChanged: (value) => checkBoxChanged(value!, index),
+              deleteTask: (context) => deleteTask(index),
             );
           },
           itemCount: taskList.length,
