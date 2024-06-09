@@ -23,7 +23,11 @@ class _HomePageState extends State<HomePage> {
   // Create New Task
   void createNewTask() {
     showDialog(context: context, builder: (context) {
-      return DialogBox(controller: _controller,);
+      return DialogBox(
+        controller: _controller,
+        onSave: () {  },
+        onCancel: Navigator.of(context).pop,
+      );
     });
   }
 
